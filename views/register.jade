@@ -1,0 +1,44 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='utf-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        title Register
+        link(rel='stylesheet', href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+        script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+        script(type='text/javascript').
+            function FN(){
+                var uid = document.getElementById("user");
+                var pass = document.getElementById("pass");
+                var name = document.getElementById("name");
+                var email = document.getElementById("email");
+                var d = {uid:uid.value, password:pass.value,name:name.value,email:email.value};
+                $.ajax({
+                    url:"http://localhost:5000/register",
+                    data: d,
+                    dataType:'json',
+                    type:'POST',
+                    success: function(data, textStatus, jqXHR) {
+                        if (typeof(data.redirect) == 'string')
+                            window.location = data.redirect
+                    },
+                    error: function( data ){
+                        alert('Error '+ JSON.stringify(data));
+                    }
+                });
+            }
+    body
+        .container
+            .row
+                .col-sm-6.col-md-4.col-md-offset-4
+                    h1.text-center.login-title Sign Up!
+                    .account-wall
+                        form.form-signin(onsubmit='return FN();')
+                            input#name.form-control(type='text', placeholder='Full Name', required='', autofocus='')
+                            input#email.form-control(type='text', placeholder='Email', required='')
+                            input#user.form-control(type='text', placeholder='Enter a username', required='')
+                            input#pass.form-control(type='password', placeholder='and a Password', required='')
+                            button.btn.btn-lg.btn-primary.btn-block(type='submit') Sign up!
+                    a.text-center.new-account(href='/login') Sign In
